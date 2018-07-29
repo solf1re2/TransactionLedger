@@ -1,10 +1,12 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using TransactionLedger.Data;
+using TransactionLedger.Models;
 
 namespace TransactionLedger
 {
@@ -22,6 +24,11 @@ namespace TransactionLedger
         {
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
 
+            services.AddDbContext<WoollyBusinessLedgerContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("WoollyBusinessDbLocal")));
+
+            services.AddDbContext<ApplicationDbContext>(options =>
+                options.UseSqlServer(Configuration.GetConnectionString("WoollyBusinessApplication")));
             // In production, the React files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
